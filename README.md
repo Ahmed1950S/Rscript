@@ -1,0 +1,2 @@
+# Rscript
+Applied stat project
