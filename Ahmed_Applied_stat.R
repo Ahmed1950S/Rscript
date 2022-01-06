@@ -1,7 +1,4 @@
 
-library(pacman)
-pacman::p_load(data.table, fixest, BatchGetSymbols, ggplot2, lubridate, zoo,dplyr)
-
 #1. Downloading the stock data
 
 ## Set parameters
@@ -11,16 +8,18 @@ freq.data <- "monthly"
 tickers <- c("AAPL")
 
 #2. Get Stock Prices
+require("BatchGetSymbols")
 
 stocks <- BatchGetSymbols(tickers = tickers,
-                         first.date = first.date,
-                         last.date = last.date,
-                         freq.data = freq.data,
-                         do.cache = FALSE,
-                         thresh.bad.data = 0)
+                          first.date = first.date,
+                          last.date = last.date,
+                          freq.data = freq.data,
+                          do.cache = FALSE,
+                          thresh.bad.data = 0)
 
 
 #2. Get Returns
+require("data.table")
 stocks_DT <- stocks$df.tickers %>% setDT() %>%          # Convert to data.table
   .[order(ticker, ref.date)]                           # Order by ticker and date
 
@@ -28,11 +27,14 @@ stocks_DT <- stocks$df.tickers %>% setDT() %>%          # Convert to data.table
 summary(stocks_DT)
 
 #4. Moving average
+require("zoo")
+require("dplyr")
 stocks_DT <- stocks_DT %>%
   mutate(adjusted10 = rollmean(price.adjusted, k = 10, fill = NA),
          adjusted30 = rollmean(price.adjusted, k = 30, fill = NA),)
 
 #4. Graph Returns, Prices and moving average
+require("ggplot2")
 returns_plot_all <- ggplot(stocks_DT, aes(x= ref.date, y = ret.adjusted.prices, colour = ticker)) +
   geom_line() + theme_bw() + labs(title = "", x = "Date", y= "Monthly Returns", subtitle = "")
 
@@ -50,3 +52,4 @@ ggplot(stocks_DT, aes(x=ref.date))+
   ggtitle("Adjusted price and moving averages of adjusted price of Apple")+
   theme_bw()+
   theme(legend.position = "bottom")
+
