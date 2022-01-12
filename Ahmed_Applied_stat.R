@@ -41,7 +41,7 @@ returns_plot_all <- ggplot(stocks_DT, aes(x= ref.date, y = ret.adjusted.prices, 
 price_plot_all <- ggplot(stocks_DT, aes(x= ref.date, y = price.close, colour = ticker)) +
   geom_line() + theme_bw() + labs(title = "", x = "Date", y= "Closing Price", subtitle = "")
 
-returns_sep <- ggplot(stocks_DT[ticker %in% c("AAP")], aes(x = ref.date, y = ret.adjusted.prices)) + geom_line() + facet_wrap(~ticker, scales = "free_y") + theme_bw()
+returns_sep <- ggplot(stocks_DT[ticker %in% c("AAPL")], aes(x = ref.date, y = ret.adjusted.prices)) + geom_line() + facet_wrap(~ticker, scales = "free_y") + theme_bw()
 prices_sep <- ggplot(stocks_DT[ticker %in% c("AAPL")], aes(x = ref.date, y = price.close)) + geom_line() + facet_wrap(~ticker, scales = "free_y") + theme_bw()
 
 ggplot(stocks_DT, aes(x=ref.date))+
@@ -52,4 +52,5 @@ ggplot(stocks_DT, aes(x=ref.date))+
   ggtitle("Adjusted price and moving averages of adjusted price of Apple")+
   theme_bw()+
   theme(legend.position = "bottom")
+
 
